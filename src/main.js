@@ -6,7 +6,6 @@ import { getPoints, getDestinations, getOffers } from './mock/point.js';
 
 const siteHeaderElement = document.querySelector('.trip-main');
 const siteMainElement = document.querySelector('.page-main');
-
 const tripPresenter = new TripEventsPresenter(siteMainElement.querySelector('.trip-events'));
 const pointsModel = new PointsModel();
 
