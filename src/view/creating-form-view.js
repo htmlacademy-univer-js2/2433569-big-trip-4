@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 
 const createCreatingFormTemplate = () => (
-    `<li class="trip-events__item">
+  `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -145,19 +145,19 @@ const createCreatingFormTemplate = () => (
 );
 
 export default class CreatingFormView {
-    getTemplate() {
-        return createCreatingFormTemplate;
+  getTemplate() {
+    return createCreatingFormTemplate();
+  }
+
+  getElement() {
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
     }
 
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-        }
+    return this.element;
+  }
 
-        return this.element;
-    }
-
-    removeElement() {
-        this.element = null;
-    }
+  removeElement() {
+    this.element = null;
+  }
 }
