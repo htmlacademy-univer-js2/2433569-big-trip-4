@@ -1,5 +1,5 @@
-import { humanizePointDueDate, duration, getDate, getTime } from '../utils.js';
-import { createElement } from '../render.js';
+import { humanizePointDueDate, duration, getDate, getTime } from '../utils/point-date.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const renderOffers = (allOffers, checkedOffers) => {
   let result = '';
@@ -54,26 +54,29 @@ const createRoutePointTemplate = (point, destinations, offers) => {
   );
 };
 
-export default class RoutePointView {
+export default class RoutePointView extends AbstractView {
+  #point = null;
+  #destination = null;
+  #offers = null;
+  _callback = {};
   constructor(point, destination, offers) {
-    this.points = point;
-    this.destination = destination;
-    this.offers = offers;
+    super();
+    this.#point = point;
+    this.#destination = destination;
+    this.#offers = offers;
   }
 
-  getTemplate() {
-    return createRoutePointTemplate(this.points, this.destination, this.offers);
+  get template() {
+    return createRoutePointTemplate(this.#point, this.#destination, this.#offers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  };
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
+  };
 }
