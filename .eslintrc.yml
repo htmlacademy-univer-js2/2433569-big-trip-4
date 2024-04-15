@@ -3,6 +3,11 @@ rules:
   no-extra-semi: off
   eol-last": off
 
+{
+ "rules": {
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }]
+ }
+}
 
 parserOptions:
   ecmaVersion: latest
