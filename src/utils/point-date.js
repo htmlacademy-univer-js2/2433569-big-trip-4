@@ -28,4 +28,4 @@ const getDate = (date) => dayjs(date).format(DATE_FORMAT);
 const getTime = (date) => dayjs(date).format(TIME_FORMAT);
 const getDateTime = (date) => dayjs(date).format(DATE_TIME_FORMAT);
 
-export { humanizePointDueDate, duration, getDate, getDateTime, getTime }; 
+export { humanizePointDueDate, duration, getDate, getDateTime, getTime };
