@@ -1,3 +1,9 @@
+
+rules: 
+  no-extra-semi: off
+  eol-last": off
+
+
 parserOptions:
   ecmaVersion: latest
   sourceType: 'module'

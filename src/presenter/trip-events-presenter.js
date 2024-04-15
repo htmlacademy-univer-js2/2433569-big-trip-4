@@ -13,7 +13,7 @@ export default class TripEventsPresenter {
   #destinations = null;
   #offers = null;
 
-  constructor(tripContainer) { 
+  constructor(tripContainer) {
     this.#eventsList = new TripEventsView();
     this.tripContainer = tripContainer;
   }
