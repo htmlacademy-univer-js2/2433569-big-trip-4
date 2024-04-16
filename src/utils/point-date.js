@@ -28,4 +28,8 @@ const getDate = (date) => dayjs(date).format(DATE_FORMAT);
 const getTime = (date) => dayjs(date).format(TIME_FORMAT);
 const getDateTime = (date) => dayjs(date).format(DATE_TIME_FORMAT);
 
-export { humanizePointDueDate, duration, getDate, getDateTime, getTime };
+const isPointPastDate = (date) => dayjs().diff(date, 'day') > 0;
+const isPointFutureDate = (date) => date.diff(dayjs(), 'day') >= 0;
+const isPointFuturePastDate = (dateFrom, dateTo) => dayjs().diff(dateFrom, 'day') > 0 && dateTo.diff(dayjs(), 'day') > 0;
+
+export { humanizePointDueDate, duration, getDate, getDateTime, getTime, isPointPastDate, isPointFutureDate, isPointFuturePastDate };

@@ -1,7 +1,7 @@
 import { getRandomInteger, getRandomElement } from '../utils/comon.js';
 import dayjs from 'dayjs';
 
-const COUNT_OF_POINTS = 20;
+const COUNT_OF_POINTS = 5;
 const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const DESTINATION_NAMES = ['London', 'Moscow', 'Dubai', 'Bangkok', 'Paris'];
 
@@ -66,7 +66,7 @@ const generatePoint = (id) => {
   return {
     basePrice: getRandomInteger(Price.MIN, Price.MAX),
     dateFrom: dayjs().add(getRandomInteger(-3, 0), 'day').add(getRandomInteger(-2, 0), 'hour').add(getRandomInteger(-59, 0), 'minute'),
-    dateTo: dayjs().add(getRandomInteger(0, 2), 'hour').add(getRandomInteger(0, 59), 'minute'),
+    dateTo: dayjs().add(getRandomInteger(0, 2),'day').add(getRandomInteger(0, 2), 'hour').add(getRandomInteger(0, 59), 'minute'),
     destinationId: getRandomElement(destinations).id,
     id,
     isFavorite: Boolean(getRandomInteger()),
@@ -75,6 +75,12 @@ const generatePoint = (id) => {
   };
 };
 
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past'
+};
+
 const getPoints = () => Array.from({ length: COUNT_OF_POINTS }).map((value, index) => generatePoint(index + 1));
 
-export { getPoints, getDestinations, getOffers };
+export { getPoints, getDestinations, getOffers, FilterType };
