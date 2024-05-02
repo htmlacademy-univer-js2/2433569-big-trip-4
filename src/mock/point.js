@@ -82,6 +82,6 @@ const FilterType = {
   PAST: 'past'
 };
 
-const getPoints = () => Array.from({ length: COUNT_OF_POINTS }).map(() => generatePoint());
+const getPoints = () => Array.from({ length: COUNT_OF_POINTS }).map(() => generatePoint()).sort();
 
 export { getPoints, getDestinations, getOffers, FilterType };
