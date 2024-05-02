@@ -9,7 +9,7 @@ export default class TripEventsPresenter {
   #tripContainer = null;
   #pointsModel = null;
   #boardPoints = null;
-  
+
 
   #noPointComponent = new NoPointView();
   #sortComponent = new SortingView();
@@ -23,7 +23,7 @@ export default class TripEventsPresenter {
 
   init() {
     this.#boardPoints = [...this.#pointsModel.points];
-    
+
     if (this.#boardPoints.length === 0) {
       this.#renderNoPoints();
     }
@@ -40,18 +40,18 @@ export default class TripEventsPresenter {
   #handlePointChange = (updatedPoint) => {
     this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
-  };  
+  };
 
   #renderSort = () => {
     render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
-    
+
   #renderPoint (point) {
     const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#pointsModel, this.#handlePointChange, this.#handleModeChange);
     pointPresenter.init(point);
     this.#pointPresenter.set(point.id, pointPresenter);
   };
-    
+
   #renderPoints = (from, to) => {
     this.#boardPoints
       .slice(from, to)

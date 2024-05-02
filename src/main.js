@@ -8,8 +8,6 @@ import { generateFilter } from './mock/filter.js';
 const siteHeaderElement = document.querySelector('.trip-main');
 const siteMainElement = document.querySelector('.page-main');
 
-
-
 const points = getPoints();
 const offersByType = getOffers();
 const destinations = getDestinations();
