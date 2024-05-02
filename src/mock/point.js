@@ -1,5 +1,6 @@
 import { getRandomInteger, getRandomElement } from '../utils/comon.js';
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 
 const COUNT_OF_POINTS = 5;
 const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
@@ -60,7 +61,7 @@ const getOffers = () => Array.from({ length: POINT_TYPES.length }).map((value, i
 const offersByType = getOffers();
 const destinations = getDestinations();
 
-const generatePoint = (id) => {
+const generatePoint = () => {
   const offersByTypePoint = getRandomElement(offersByType);
   const allOfferIdsByTypePoint = offersByTypePoint.offers.map((offer) => offer.id);
   return {
@@ -68,7 +69,7 @@ const generatePoint = (id) => {
     dateFrom: dayjs().add(getRandomInteger(-3, 0), 'day').add(getRandomInteger(-2, 0), 'hour').add(getRandomInteger(-59, 0), 'minute'),
     dateTo: dayjs().add(getRandomInteger(0, 2),'day').add(getRandomInteger(0, 2), 'hour').add(getRandomInteger(0, 59), 'minute'),
     destinationId: getRandomElement(destinations).id,
-    id,
+    id: nanoid(),
     isFavorite: Boolean(getRandomInteger()),
     offerIds: Array.from({ length: getRandomInteger(0, allOfferIdsByTypePoint.length) }).map(() => allOfferIdsByTypePoint[getRandomInteger(0, allOfferIdsByTypePoint.length - 1)]),
     type: offersByTypePoint.type,
@@ -81,6 +82,6 @@ const FilterType = {
   PAST: 'past'
 };
 
-const getPoints = () => Array.from({ length: COUNT_OF_POINTS }).map((value, index) => generatePoint(index + 1));
+const getPoints = () => Array.from({ length: COUNT_OF_POINTS }).map(() => generatePoint());
 
 export { getPoints, getDestinations, getOffers, FilterType };
