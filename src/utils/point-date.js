@@ -54,4 +54,13 @@ const isPointPastDate = (date) => dayjs().diff(date, 'day') > 0;
 const isPointFutureDate = (date) => date.diff(dayjs(), 'day') >= 0;
 const isPointFuturePastDate = (dateFrom, dateTo) => dayjs().diff(dateFrom, 'day') > 0 && dateTo.diff(dayjs(), 'day') > 0;
 
-export { humanizePointDueDate, duration, getDate, getDateTime, getTime, isPointPastDate, isPointFutureDate, isPointFuturePastDate };
+const sortPointsByPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+const sortPointsByDay = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+
+const sortPointsByTime = (pointA, pointB) => {
+  const timePointA = dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
+  const timePointB = dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom));
+  return timePointB - timePointA;
+};
+
+export { humanizePointDueDate, duration, getDate, getDateTime, getTime, isPointPastDate, isPointFutureDate, isPointFuturePastDate, sortPointsByPrice, sortPointsByDay, sortPointsByTime };
