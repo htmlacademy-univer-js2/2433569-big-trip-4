@@ -25,6 +25,7 @@ const updateItem = (items, update) => {
   ];
 };
 
+const upperFirstSymbol = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 const isEscape = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export { getRandomInteger, getRandomElement, updateItem, isEscape };
+export { getRandomInteger, getRandomElement, updateItem, upperFirstSymbol, isEscape };
