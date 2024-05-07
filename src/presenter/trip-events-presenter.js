@@ -76,13 +76,13 @@ export default class TripEventsPresenter {
       case UpdateType.PATCH:
         this.pointPresenter.get(data.id).init(data);
         break;
-        case UpdateType.MINOR:
-          this.#clearPointList();
-          this.#renderTripEvents();
+      case UpdateType.MINOR:
+        this.#clearPointList();
+        this.#renderTripEvents();
         break;
-        case UpdateType.MAJOR:
-          this.#clearPointList({resetSortType: true});
-          this.#renderTripEvents();
+      case UpdateType.MAJOR:
+        this.#clearPointList({resetSortType: true});
+          his.#renderTripEvents();
         break;
     }
   };

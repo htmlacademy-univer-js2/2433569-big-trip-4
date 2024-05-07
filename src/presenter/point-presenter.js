@@ -127,7 +127,7 @@ export default class PointPresenter {
     );
     this.#replaceEditingPointToPreviewPoint();
   };
-  
+
   #handleDeleteClick = (point) => {
     this.#changeData(
       UserAction.DELETE_POINT,

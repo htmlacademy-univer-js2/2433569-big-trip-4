@@ -105,9 +105,9 @@ const createEditFormTemplate = (point, destinations, offers, isNewPoint) => {
           <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
         </div>
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        ${isNewPoint ? '<button class="event__reset-btn" type="reset">Cancel</button>' :
-        `<button class="event__reset-btn" type="reset">Delete</button>
-        <button class="event__rollup-btn" type="button">`}
+          ${isNewPoint ? '<button class="event__reset-btn" type="reset">Cancel</button>' :
+          `<button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__rollup-btn" type="button">`}
           <span class="visually-hidden">Open event</span>
         </button>
       </header>
@@ -311,7 +311,7 @@ export default class EditingFormView extends AbstractStatefulView {
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setDeleteClickHandler(this._callback.deleteClick);
   };
-  
+
   static parsePointToState = (point) => ({...point,
     dateTo: dayjs(point.dateTo).toDate(),
     dateFrom: dayjs(point.dateFrom).toDate()

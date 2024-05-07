@@ -22,7 +22,7 @@ export default class PointsModel extends Observable {
   get offers() {
     return this.#offers;
   }
-  
+
   updatePoint = (updateType, update) => {
     const index = this.#points.findIndex((point) => point.id === update.id);
 

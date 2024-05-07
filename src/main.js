@@ -20,7 +20,7 @@ const filterModel = new FilterModel();
 
 const filterPresenter = new FilterPresenter(siteHeaderElement.querySelector('.trip-controls__filters'), filterModel, pointsModel);
 filterPresenter.init();
-const tripPresenter  = new TripEventsPresenter(siteMainElement.querySelector('.trip-events'), pointsModel, filterModel);
+const tripPresenter = new TripEventsPresenter(siteMainElement.querySelector('.trip-events'), pointsModel, filterModel);
 tripPresenter.init();
 
 const newPointButtonComponent = new NewPointButtonView();

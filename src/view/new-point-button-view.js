@@ -5,7 +5,7 @@ const createNewPointButtonTemplate = () => '<button class="trip-main__event-add-
 export default class NewPointButtonView extends AbstractView {
   constructor() {
     super();
-    this._callback = {}; 
+    this._callback = {};
   }
 
   get template() {
