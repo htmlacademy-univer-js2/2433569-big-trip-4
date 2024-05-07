@@ -193,7 +193,7 @@ export default class EditingFormView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(EditingFormView.parseStateToPoint(this._state))
+    this._callback.formSubmit(EditingFormView.parseStateToPoint(this._state));
   };
 
   #setInnerHandlers = () => {
