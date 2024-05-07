@@ -41,6 +41,12 @@ export default class TripEventsPresenter {
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 
+  #handlePointChange = (updatedPoint) => {
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#sourcedPoints = updateItem(this.#sourcedPoints, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  };
+
   #sortPoint = (sortType) => {
     switch (sortType) {
       case SortType.DAY:
@@ -55,12 +61,6 @@ export default class TripEventsPresenter {
     }
 
     this.#currentSortType = sortType;
-  };
-
-  #handlePointChange = (updatedPoint) => {
-    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
-    this.#sourcedPoints = updateItem(this.#sourcedPoints, updatedPoint);
-    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
   };
 
   #handleSortTypeChange = (sortType) => {
@@ -83,7 +83,7 @@ export default class TripEventsPresenter {
     const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#pointsModel, this.#handlePointChange, this.#handleModeChange);
     pointPresenter.init(point);
     this.#pointPresenter.set(point.id, pointPresenter);
-  };
+  }
 
   #renderPoints = (from, to) => {
     this.#boardPoints
