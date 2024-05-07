@@ -82,7 +82,7 @@ export default class TripEventsPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearPointList({resetSortType: true});
-          his.#renderTripEvents();
+        his.#renderTripEvents();
         break;
     }
   };
