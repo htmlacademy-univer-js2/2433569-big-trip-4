@@ -14,6 +14,8 @@ export default class PointPresenter {
   #pointComponent = null;
   #editingPointComponent = null;
   #pointsModel = null;
+  #destinationsModel = null;
+  #offersModel = null;
 
   #destinations = null;
   #offers = null;
@@ -23,19 +25,20 @@ export default class PointPresenter {
 
   #point = null;
   #mode = Mode.PREVIEW;
-  #isNewPoint = false;
 
-  constructor(pointListContainer, pointsModel, changeData, changeMode) {
+  constructor({pointListContainer, pointsModel, changeData, changeMode, destinationsModel, offersModel}) {
     this.#pointListContainer = pointListContainer;
     this.#pointsModel = pointsModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
   }
 
   init(point) {
     this.#point = point;
-    this.#destinations = [...this.#pointsModel.destinations];
-    this.#offers = [...this.#pointsModel.offers];
+    this.#destinations = [...this.#destinationsModel.destinations];
+    this.#offers = [...this.#offersModel.offers];
 
     const prevPointComponent = this.#pointComponent;
     const prevEditingPointComponent = this.#editingPointComponent;
@@ -45,26 +48,27 @@ export default class PointPresenter {
       point: point,
       destination: this.#destinations,
       offers: this.#offers,
-      isNewPoint: this.#isNewPoint
+      isNewPoint: false
     });
 
     this.#pointComponent.setEditClickHandler(this.#handleEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#editingPointComponent.setPreviewClickHandler(this.#handlePreviewClick);
     this.#editingPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#editingPointComponent.setDeleteClickHandler(this.#handleDeleteClick);
+    this.#editingPointComponent.setResetClickHandler(this.#handleResetClick);
 
     if (prevPointComponent === null || prevEditingPointComponent === null) {
       render(this.#pointComponent, this.#pointListContainer);
       return;
     }
 
-    if (this.#mode === Mode.PREVIEW) {
-      replace(this.#pointComponent, prevPointComponent);
-    }
-
-    if (this.#mode === Mode.EDITING) {
-      replace(this.#editingPointComponent, prevEditingPointComponent);
+    switch (this.#mode) {
+      case Mode.PREVIEW:
+        replace(this.#pointComponent, prevPointComponent);
+        break;
+      case Mode.EDITING:
+        replace(this.#editingPointComponent, prevEditingPointComponent);
+        break;
     }
 
     remove(prevPointComponent);
@@ -128,7 +132,7 @@ export default class PointPresenter {
     this.#replaceEditingPointToPreviewPoint();
   };
 
-  #handleDeleteClick = (point) => {
+  #handleResetClick = (point) => {
     this.#changeData(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
