@@ -143,15 +143,15 @@ export default class EditingFormView extends AbstractStatefulView {
   #datepickerFrom = null;
   #datepickerTo = null;
   #isNewPoint = null;
-  #destination = null;
+  #destinations = null;
   #offers = null;
   _callback = {};
   #offersByType = null;
 
-  constructor({point = BLANK_FORM, destination, offers, isNewPoint}) {
+  constructor({point = BLANK_FORM, destinations, offers, isNewPoint}) {
     super();
     this._state = EditingFormView.parsePointToState(point);
-    this.#destination = destination;
+    this.#destinations = destinations;
     this.#offers = offers;
     this.#isNewPoint = isNewPoint;
     this.#offersByType = this.#offers.find((offer) => offer.type === this._state.type);
@@ -159,7 +159,7 @@ export default class EditingFormView extends AbstractStatefulView {
   }
 
   get template() {
-    return createEditFormTemplate(this._state, this.#destination, this.#offers, this.#isNewPoint);
+    return createEditFormTemplate(this._state, this.#destinations, this.#offers, this.#isNewPoint);
   }
 
   removeElement = () => {
@@ -218,7 +218,7 @@ export default class EditingFormView extends AbstractStatefulView {
 
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
-    const destination = this.#destination.find((dest) => dest.name === evt.target.value);
+    const destination = this.#destinations.find((dest) => dest.name === evt.target.value);
     this.updateElement({
       destination: destination.id,
     });
@@ -234,6 +234,7 @@ export default class EditingFormView extends AbstractStatefulView {
   #pointTypeClickHandler = (evt) => {
     evt.preventDefault();
     this._state.offers = [];
+    this.#offersByType = this.#offers.find((offer) => offer.type === evt.target.value);
     this.updateElement({
       type: evt.target.value,
     });
@@ -277,7 +278,7 @@ export default class EditingFormView extends AbstractStatefulView {
   #offersClickHandler = (evt) => {
     evt.preventDefault();
     const offerId = Number(evt.target.id.slice(-1));
-    const offers = this._state.offers.filter((n) => n !== offerId);
+    const offers = this._state.offers.filter((offer) => offer !== offerId);
     let currentOffers = [...this._state.offers];
     if (offers.length !== this._state.offers.length) {
       currentOffers = offers;

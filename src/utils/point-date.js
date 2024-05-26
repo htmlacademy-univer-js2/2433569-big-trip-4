@@ -18,8 +18,8 @@ const duration = (dateFrom, dateTo) => {
   const end = dayjs(dateTo);
   const difference = end.diff(start, 'minute');
 
-  const days = Math.floor(difference / TOTAL_DAY_MINUTES_COUNT);
-  const restHours = Math.floor((difference - days * TOTAL_DAY_MINUTES_COUNT) / HOUR_MINUTES_COUNT);
+  const days = Math.trunc(difference / TOTAL_DAY_MINUTES_COUNT);
+  const restHours = Math.trunc((difference - days * TOTAL_DAY_MINUTES_COUNT) / HOUR_MINUTES_COUNT);
   const restMinutes = difference - (days * TOTAL_DAY_MINUTES_COUNT + restHours * HOUR_MINUTES_COUNT);
 
   const daysOutput = getDaysOutput(days);
