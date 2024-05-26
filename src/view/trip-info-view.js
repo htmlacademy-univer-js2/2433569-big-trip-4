@@ -7,7 +7,7 @@ const renderRouteTrip = (points, destinations) => {
   }
   const routeWithoutRepeats = [points[0].destination];
   for (let i = 1; i < points.length; i++) {
-    if (points[i].destination !== points[i-1].destination) {
+    if (points[i].destination !== points[i - 1].destination) {
       routeWithoutRepeats.push(points[i].destination);
     }
   }

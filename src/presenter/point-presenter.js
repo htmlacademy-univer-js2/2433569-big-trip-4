@@ -115,7 +115,7 @@ export default class PointPresenter {
 
     this.#editingPointComponent.shake(resetAddFormState);
   }
- 
+
   #replacePreviewPointToEditingPoint = () => {
     replace(this.#editingPointComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);

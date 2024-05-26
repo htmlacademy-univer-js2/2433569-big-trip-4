@@ -87,7 +87,7 @@ export default class TripEventsPresenter {
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = async (actionType, updateType, update) => { 
+  #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
@@ -183,7 +183,7 @@ export default class TripEventsPresenter {
     render(this.#loadingComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
-  #renderErrorMessage= () => {
+  #renderErrorMessage = () => {
     render(this.#errorMessageComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
