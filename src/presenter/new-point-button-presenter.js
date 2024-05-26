@@ -24,10 +24,10 @@ export default class NewPointButtonPresenter {
   renderNewPointButton = () => {
     render(this.#newButtonComponent, this.#newPointButtonContainer);
     this.#newButtonComponent.setClickHandler(this.#handleNewPointButtonClick);
-      if (this.#offersModel.offers.length === 0 || this.#offersModel.isSuccessfulLoading === false ||
-        this.#destinationsModel.destinations.length === 0 || this.#destinationsModel.isSuccessfulLoading === false ||
-        this.#pointsModel.isSuccessfulLoading === false) {
-        this.#newButtonComponent.element.disabled = true;
+    if (this.#offersModel.offers.length === 0 || this.#offersModel.isSuccessfulLoading === false ||
+      this.#destinationsModel.destinations.length === 0 || this.#destinationsModel.isSuccessfulLoading === false ||
+      this.#pointsModel.isSuccessfulLoading === false) {
+      this.#newButtonComponent.element.disabled = true;
     }
   };
 

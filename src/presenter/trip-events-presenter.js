@@ -20,6 +20,7 @@ const TimeLimit = {
 export default class TripEventsPresenter {
   #tripInfoContainer = null;
   #tripContainer = null;
+
   #pointsModel = null;
   #filterModel = null;
   #destinationsModel = null;
@@ -34,6 +35,7 @@ export default class TripEventsPresenter {
   #pointPresenter = new Map();
   #pointNewPresenter = null;
   #tripInfoPresenter = null;
+  
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
