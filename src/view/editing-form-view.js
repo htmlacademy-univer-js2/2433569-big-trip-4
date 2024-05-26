@@ -112,7 +112,7 @@ const createEditFormTemplate = (point, destinations, allOffers, isNewPoint) => {
           <label class="event__label  event__type-output" for="event-destination-${destination}">
           ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-${destination}" type="text" name="event-destination" value="${destinationData ? he.encode(destinationData.name): ''}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-${destination}" type="text" name="event-destination" value="${destinationData ? he.encode(destinationData.name) : ''}" list="destination-list-1">
           <datalist id="destination-list-1">
           ${renderDestinationNames(destinations)}
           </datalist>
@@ -307,7 +307,7 @@ export default class EditingFormView extends AbstractStatefulView {
       .addEventListener('change', this.#pointTypeClickHandler);
     this.element.querySelector('.event__input')
       .addEventListener('change', this.#destinationInputHandler);
-    if(this.#offersByType && this.#offersByType.offers.length > 0)  {
+    if(this.#offersByType && this.#offersByType.offers.length > 0){
       this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersClickHandler);
     }
     this.element.querySelector('.event__input--price')
