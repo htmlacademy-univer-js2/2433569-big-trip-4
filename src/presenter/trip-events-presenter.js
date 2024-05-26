@@ -35,7 +35,7 @@ export default class TripEventsPresenter {
   #pointPresenter = new Map();
   #pointNewPresenter = null;
   #tripInfoPresenter = null;
-  
+
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
@@ -174,6 +174,7 @@ export default class TripEventsPresenter {
     this.#renderPointList(points);
     this.#renderSort();
   };
+
   #handleModeChange = () => {
     this.#pointNewPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
