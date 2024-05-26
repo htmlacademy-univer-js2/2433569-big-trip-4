@@ -1,9 +1,9 @@
 import FilterPresenter from './presenter/filter-presenter.js';
 import TripEventsPresenter from './presenter/trip-events-presenter.js';
 import FilterModel from './model/filter-model.js';
-import NewPointButtonView from './view/new-point-button-view.js';
+import NewPointButtonPresenter from './presenter/new-point-button-presenter.js';
 import { render } from './framework/render.js';
-import SiteMenuView from './view/site-menu.js';
+import SiteMenuView from './view/site-menu-view.js';
 import PointsModel from './model/trip-points-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
@@ -31,6 +31,7 @@ const filterPresenter = new FilterPresenter({
 filterPresenter.init();
 
 const tripPresenter = new TripEventsPresenter({
+  tripInfoContainer: siteHeaderElement.querySelector('.trip-main__trip-info'),
   tripContainer: siteMainElement.querySelector('.trip-events'),
   pointsModel: pointsModel,
   filterModel: filterModel,
@@ -39,22 +40,19 @@ const tripPresenter = new TripEventsPresenter({
 });
 tripPresenter.init();
 
-const newPointButtonComponent = new NewPointButtonView();
+const newPointButtonPresenter = new NewPointButtonPresenter({
+  newPointButtonContainer: siteHeaderElement,
+  destinationsModel: destinationsModel,
+  offersModel: offersModel,
+  tripPresenter: tripPresenter
+});
 
-const handleNewPointFormClose = () => {
-  newPointButtonComponent.element.disabled = false;
-};
-
-const handleNewPointButtonClick = () => {
-  tripPresenter.createNewForm(handleNewPointFormClose);
-  newPointButtonComponent.element.disabled = true;
-};
+newPointButtonPresenter.init();
 
 offersModel.init().finally(() => {
   destinationsModel.init().finally(() => {
     pointsModel.init().finally(() => {
-      render(newPointButtonComponent, siteHeaderElement);
-      newPointButtonComponent.setClickHandler(handleNewPointButtonClick);
+      newPointButtonPresenter.renderNewPointButton();
     });
   });
 });

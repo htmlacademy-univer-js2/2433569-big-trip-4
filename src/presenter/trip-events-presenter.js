@@ -4,12 +4,21 @@ import PointPresenter from './point-presenter.js';
 import SortingView from '../view/sorting-view.js';
 import PointNewPresenter from './point-new-presenter.js';
 import LoadingView from '../view/loading-view.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import ErrorMessageView from '../view/error-message-view.js';
+import TripInfoPresenter from './info-presenter.js';
 import { filter } from '../utils/filter.js';
 import { render, RenderPosition, remove } from '../framework/render.js';
 import { SortType, UserAction, UpdateType, FilterType } from '../const.js';
 import { sorting } from '../utils/point-date.js';
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
 export default class TripEventsPresenter {
+  #tripInfoContainer = null;
   #tripContainer = null;
   #pointsModel = null;
   #filterModel = null;
@@ -20,14 +29,18 @@ export default class TripEventsPresenter {
   #sortComponent = null;
   #pointListComponent = new TripEventsView();
   #loadingComponent = new LoadingView();
+  #errorMessageComponent = new ErrorMessageView();
 
   #pointPresenter = new Map();
   #pointNewPresenter = null;
+  #tripInfoPresenter = null;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
-  constructor({tripContainer, pointsModel, filterModel, destinationsModel, offersModel}) {
+  constructor({tripInfoContainer, tripContainer, pointsModel, filterModel, destinationsModel, offersModel}) {
+    this.#tripInfoContainer = tripInfoContainer;
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
@@ -37,7 +50,6 @@ export default class TripEventsPresenter {
     this.#pointNewPresenter = new PointNewPresenter({
       pointListContainer: this.#pointListComponent.element,
       changeData: this.#handleViewAction,
-      pointsModel: this.#pointsModel,
       destinationsModel: this.#destinationsModel,
       offersModel: this.#offersModel
     });
@@ -64,6 +76,9 @@ export default class TripEventsPresenter {
   createNewForm = (callback) => {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    if (this.#noPointComponent) {
+      render(this.#pointListComponent, this.#tripContainer);
+    }
     this.#pointNewPresenter.init(callback);
   };
 
@@ -72,18 +87,35 @@ export default class TripEventsPresenter {
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => { 
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointsModel.updatePoint(updateType, update);
+        this.#pointPresenter.get(update.id).setSaving();
+        try {
+          await this.#pointsModel.updatePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresenter.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointsModel.addPoint(updateType, update);
+        this.#pointNewPresenter.setSaving();
+        try {
+          await this.#pointsModel.addPoint(updateType, update);
+        } catch(err) {
+          this.#pointNewPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointsModel.deletePoint(updateType, update);
+        this.#pointPresenter.get(update.id).setDeleting();
+        try {
+          await this.#pointsModel.deletePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresenter.get(update.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -93,6 +125,8 @@ export default class TripEventsPresenter {
         break;
       case UpdateType.MINOR:
         this.#clearPointList();
+        this.#clearTripInfo();
+        this.#renderTripInfo();
         this.#renderTripEvents();
         break;
       case UpdateType.MAJOR:
@@ -102,8 +136,8 @@ export default class TripEventsPresenter {
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
-        remove(this.#noPointComponent);
         this.#renderTripEvents();
+        this.#renderTripInfo();
         break;
     }
   };
@@ -123,10 +157,15 @@ export default class TripEventsPresenter {
     render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
+  #renderTripInfo = () => {
+    this.#tripInfoPresenter = new TripInfoPresenter(this.#tripInfoContainer, this.#destinationsModel, this.#offersModel);
+    const sortedPoints = sorting[SortType.DAY](this.points);
+    this.#tripInfoPresenter.init(sortedPoints);
+  };
+
   #renderPoint (point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
-      pointsModel: this.#pointsModel,
       changeData: this.#handleViewAction,
       changeMode: this.#handleModeChange,
       destinationsModel: this.#destinationsModel,
@@ -144,6 +183,10 @@ export default class TripEventsPresenter {
     render(this.#loadingComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
+  #renderErrorMessage= () => {
+    render(this.#errorMessageComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+  };
+
   #renderNoPoints = () => {
     this.#noPointComponent = new NoPointView(this.#filterType);
     render(this.#noPointComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
@@ -152,6 +195,10 @@ export default class TripEventsPresenter {
   #renderPointList = (points) => {
     render(this.#pointListComponent, this.#tripContainer);
     this.#renderPoints(points);
+  };
+
+  #clearTripInfo = () => {
+    this.#tripInfoPresenter.destroy();
   };
 
   #clearPointList = ({resetSortType = false} = {}) => {
@@ -174,6 +221,11 @@ export default class TripEventsPresenter {
   #renderTripEvents = () => {
     if (this.#isLoading) {
       this.#renderLoading();
+      return;
+    }
+
+    if (this.#offersModel.offers.length === 0 || this.#destinationsModel.destinations.length === 0) {
+      this.#renderErrorMessage();
       return;
     }
 
