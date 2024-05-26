@@ -11,7 +11,6 @@ const getRandomElement = (elements) => {
   return elements[getRandomInteger(MIN, max)];
 };
 
-const upperFirstSymbol = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 const isEscape = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export { getRandomInteger, getRandomElement, upperFirstSymbol, isEscape };
+export { getRandomInteger, getRandomElement, isEscape };
