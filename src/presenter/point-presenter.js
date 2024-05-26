@@ -13,7 +13,6 @@ export default class PointPresenter {
   #pointListContainer = null;
   #pointComponent = null;
   #editingPointComponent = null;
-  #pointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
 
@@ -26,9 +25,8 @@ export default class PointPresenter {
   #point = null;
   #mode = Mode.PREVIEW;
 
-  constructor({pointListContainer, pointsModel, changeData, changeMode, destinationsModel, offersModel}) {
+  constructor({pointListContainer, changeData, changeMode, destinationsModel, offersModel}) {
     this.#pointListContainer = pointListContainer;
-    this.#pointsModel = pointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
     this.#changeData = changeData;
@@ -67,7 +65,8 @@ export default class PointPresenter {
         replace(this.#pointComponent, prevPointComponent);
         break;
       case Mode.EDITING:
-        replace(this.#editingPointComponent, prevEditingPointComponent);
+        replace(this.#pointComponent, prevEditingPointComponent);
+        this.#mode = Mode.PREVIEW;
         break;
     }
 
@@ -86,6 +85,36 @@ export default class PointPresenter {
       this.#replaceEditingPointToPreviewPoint();
     }
   };
+
+  setSaving = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#editingPointComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  };
+
+  setDeleting = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#editingPointComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  };
+
+  setAborting() {
+    const resetAddFormState = () => {
+      this.#editingPointComponent.updateElement({
+        isSaving: false,
+        isDeleting: false,
+        isDisabled: false,
+      });
+    };
+
+    this.#editingPointComponent.shake(resetAddFormState);
+  }
 
   #replacePreviewPointToEditingPoint = () => {
     replace(this.#editingPointComponent, this.#pointComponent);
@@ -129,7 +158,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-    this.#replaceEditingPointToPreviewPoint();
   };
 
   #handleResetClick = (point) => {

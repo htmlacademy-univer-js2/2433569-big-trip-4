@@ -63,6 +63,8 @@ const PointDescription = {
 const ApiServiceResponse = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 export {SORT_TYPES_OFF, FilterType, SortType, UserAction, UpdateType, SortTypeDescription, Point, PointDescription, ApiServiceResponse};
