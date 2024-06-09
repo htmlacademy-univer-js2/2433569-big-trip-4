@@ -1,5 +1,6 @@
 const FilterType = {
   EVERYTHING: 'everything',
+  PRESENT: 'present',
   FUTURE: 'future',
   PAST: 'past'
 };
