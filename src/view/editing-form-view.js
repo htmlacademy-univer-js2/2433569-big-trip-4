@@ -162,6 +162,12 @@ export default class EditingFormView extends AbstractStatefulView {
     return createEditFormTemplate(this._state, this.#destinations, this.#offers, this.#isNewPoint);
   }
 
+  reset = (point) => {
+    this.updateElement(
+      EditingFormView.parsePointToState(point),
+    );
+  };
+
   removeElement = () => {
     super.removeElement();
 
@@ -181,15 +187,9 @@ export default class EditingFormView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#previewClickHandler);
   };
 
-  #previewClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.previewClick();
-  };
-
-  reset = (point) => {
-    this.updateElement(
-      EditingFormView.parsePointToState(point),
-    );
+  setResetClickHandler = (callback) => {
+    this._callback.resetClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formResetClickHandler);
   };
 
   setFormSubmitHandler = (callback) => {
@@ -214,6 +214,11 @@ export default class EditingFormView extends AbstractStatefulView {
     this.updateElement({
       dateTo: userDate,
     });
+  };
+
+  #previewClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.previewClick();
   };
 
   #destinationInputHandler = (evt) => {
@@ -270,14 +275,9 @@ export default class EditingFormView extends AbstractStatefulView {
     }
   };
 
-  setResetClickHandler = (callback) => {
-    this._callback.resetClick = callback;
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formResetClickHandler);
-  };
-
   #offersClickHandler = (evt) => {
     evt.preventDefault();
-    const offerId = Number(evt.target.id.slice(-1));
+    const offerId = evt.target.id.split('-').slice(2).join('-');
     const offers = this._state.offers.filter((offer) => offer !== offerId);
     let currentOffers = [...this._state.offers];
     if (offers.length !== this._state.offers.length) {
@@ -286,6 +286,7 @@ export default class EditingFormView extends AbstractStatefulView {
     else {
       currentOffers.push(offerId);
     }
+
     this._setState({
       offers: currentOffers,
     });
